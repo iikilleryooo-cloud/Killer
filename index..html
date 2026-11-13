@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Portfolio | Monochrome Edition</title>
+  <!-- Modern English Fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #050505;
+      --bg-card: rgba(18, 18, 20, 0.78);
+      --accent: #ffffff;
+      --accent-glow: rgba(255, 255, 255, 0.22);
+      --accent-muted: #d4d4d8;
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+      --border-glass: rgba(255, 255, 255, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    /* Hide default cursor on desktop devices */
+    @media (pointer: fine) {
+      body, a, button, label, input {
+        cursor: none !important;
+      }
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 45%);
+    }
+
+    /* Snowfall Canvas */
+    #snowCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* Custom Large White Dot Cursor */
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 22px;
+      height: 22px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.8), 0 0 35px rgba(255, 255, 255, 0.35);
+      transition: width 0.22s ease, height 0.22s ease, opacity 0.22s ease, background-color 0.22s ease;
+      mix-blend-mode: difference;
+    }
+
+    .custom-cursor.hovered {
+      width: 44px;
+      height: 44px;
+      background-color: #ffffff;
+    }
+
+    @media (pointer: coarse) {
+      .custom-cursor {
+        display: none;
+      }
+    }
+
+    h1, h2, h3, .logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Top Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 1.1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--text-muted);
+    }
+
+    nav {
+      display: flex;
+      gap: 2.2rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      padding: 8rem 8% 4rem;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1.1rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #f4f4f5;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #ffffff 30%, #71717a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.9rem 2rem;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #050505;
+      box-shadow: 0 10px 25px -5px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: #e4e4e7;
+      box-shadow: 0 15px 30px -5px rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-glass);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Monochrome Luxury Profile Frame */
+    .profile-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .profile-frame {
+      position: relative;
+      width: 340px;
+      height: 410px;
+      border-radius: 24px;
+      padding: 4px;
+      background: linear-gradient(145deg, #ffffff, #27272a 50%, #a1a1aa);
+      box-shadow: 0 25px 60px -15px rgba(255, 255, 255, 0.14);
+      transition: transform 0.4s ease;
+    }
+
+    .profile-frame:hover {
+      transform: translateY(-6px);
+    }
+
+    .profile-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      background-color: #121214;
+      display: block;
+    }
+
+    .upload-hint {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .upload-hint:hover {
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    /* General Sections */
+    section {
+      padding: 5rem 8%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title h2 span {
+      color: var(--text-muted);
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+    }
+
+    /* Cards Grid */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 18px;
+      padding: 2.2rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ffffff, transparent);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 20px 40px -20px rgba(255, 255, 255, 0.15);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.3rem;
+      color: #ffffff;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+    }
+
+    /* Portfolio Section */
+    .portfolio-item {
+      padding: 0;
+    }
+
+    .portfolio-thumb {
+      height: 210px;
+      background: linear-gradient(135deg, #141416, #27272a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.35);
+      border-bottom: 1px solid var(--border-glass);
+      position: relative;
+    }
+
+    .portfolio-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(5, 5, 5, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .portfolio-body {
+      padding: 1.6rem;
+    }
+
+    /* Contact Section */
+    .contact-box {
+      background: linear-gradient(145deg, rgba(20, 20, 22, 0.9), rgba(10, 10, 12, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 3.5rem 2rem;
+      text-align: center;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: 0.3s;
+    }
+
+    .social-btn:hover {
+      background: #ffffff;
+      color: #050505;
+      border-color: #ffffff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border-glass);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 7rem;
+      }
+      .hero p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-buttons {
+        justify-content: center;
+      }
+      .profile-frame {
+        width: 290px;
+        height: 350px;
+      }
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Snowfall Background Canvas -->
+  <canvas id="snowCanvas"></canvas>
+
+  <!-- Custom White Dot Cursor -->
+  <div class="custom-cursor" id="customCursor"></div>
+
+  <!-- Top Navigation -->
+  <header>
+    <a href="#" class="logo">𝐢𝐢𝐊𝐢𝐋𝐋𝐞𝐫𝟎𝟕<span>.</span></a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#skills">Skills & Focus</a>
+      <a href="#portfolio">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="about">
+    <div>
+      <span class="badge">📍 Algeria • 2nd Year High School Student (2ème AS)</span>
+      <h1>Hi, I'm <span>𝐢𝐢𝐊𝐢𝐋𝐋𝐞𝐫𝟎𝟕</span><br>Creative Student & Digital Builder</h1>
+      <p>
+        I'm a 2nd-year high school student based in Algeria with a strong passion for modern web design, coding, and building sleek digital experiences from the ground up.
+      </p>
+      <div class="hero-buttons">
+        <a href="#portfolio" class="btn btn-primary">Explore My Work</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+
+    <div class="profile-wrapper">
+      <div class="profile-frame">
+        <img id="profileImage" src="photo.jpg" alt="Profile Photo">
+      </div>
+      <label class="upload-hint" for="imageInput">📷 Preview another photo from PC</label>
+      <input type="file" id="imageInput" accept="image/*" style="display: none;">
+    </div>
+  </section>
+
+  <!-- Skills & Focus Section -->
+  <section id="skills">
+    <div class="section-title">
+      <h2>Skills & <span>Interests</span></h2>
+      <p>Balancing high school studies in Algeria with creative digital projects</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🎓</div>
+        <h3>Academic Journey</h3>
+        <p>Currently studying in 2nd Year High School (2ème Année Secondaire) in Algeria, focusing on analytical thinking and continuous learning.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">◈</div>
+        <h3>Web & UI Design</h3>
+        <p>Crafting clean, minimalist, and responsive interfaces with attention to modern aesthetics and user experience.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3>Front-End Development</h3>
+        <p>Building fast and interactive websites using HTML, CSS, and JavaScript while constantly exploring new technologies.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section id="portfolio">
+    <div class="section-title">
+      <h2>Featured <span>Projects</span></h2>
+      <p>A selection of personal projects and creative experiments</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card portfolio-item">
+        <div class="portfolio-thumb">
+          <span class="portfolio-tag">Web Design</span>
+          Project 01 Preview
+        </div>
+        <div class="portfolio-body">
+          <h3>Personal Portfolio Website</h3>
+          <p>A sleek black-and-white personal website built from scratch using clean HTML, CSS, and JavaScript.</p>
+        </div>
+      </div>
+
+      <div class="card portfolio-item">
+        <div class="portfolio-thumb">
+          <span class="portfolio-tag">UI Concept</span>
+          Project 02 Preview
+        </div>
+        <div class="portfolio-body">
+          <h3>Minimalist Dashboard UI</h3>
+          <p>Modern dark-mode interface concept focused on clarity, contrast, and smooth navigation.</p>
+        </div>
+      </div>
+
+      <div class="card portfolio-item">
+        <div class="portfolio-thumb">
+          <span class="portfolio-tag">Creative</span>
+          Project 03 Preview
+        </div>
+        <div class="portfolio-body">
+          <h3>Interactive Web App</h3>
+          <p>A lightweight browser-based tool designed to practice logic, layout structure, and responsive design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="contact-box">
+      <h2>Want to connect or collaborate? <span>Say Hello</span></h2>
+      <p style="color: var(--text-muted); margin-top: 0.8rem;">
+        Based in Algeria — feel free to reach out for projects, ideas, or just to connect.
+      </p>
+      <div class="social-links">
+        <a href="mailto:your.email@example.com" class="social-btn">Email Me</a>
+        <a href="#" class="social-btn">Instagram</a>
+        <a href="#" class="social-btn">GitHub</a>
+        <a href="#" class="social-btn">Discord</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 𝐢𝐢𝐊𝐢𝐋𝐋𝐞𝐫𝟎𝟕 • Made in Algeria
+  </footer>
+
+  <script>
+    // 1. Local Image Preview Script
+    const imageInput = document.getElementById('imageInput');
+    const profileImage = document.getElementById('profileImage');
+
+    imageInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          profileImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // 2. Custom Large White Dot Cursor
+    const cursor = document.getElementById('customCursor');
+    
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      cursor.style.opacity = '1';
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '0';
+    });
+
+    // Expand dot slightly on interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, label, .card');
+    interactiveElements.forEach((el) => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+
+    // 3. Snowfall Effect
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const snowflakes = [];
+    const flakeCount = 110;
+
+    for (let i = 0; i < flakeCount; i++) {
+      snowflakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.8 + 0.8,
+        speedY: Math.random() * 1.4 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.6,
+        opacity: Math.random() * 0.65 + 0.2
+      });
+    }
+
+    function animateSnow() {
+      ctx.clearRect(0, 0, width, height);
+      for (let flake of snowflakes) {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+        ctx.fill();
+
+        flake.y += flake.speedY;
+        flake.x += flake.speedX + Math.sin(flake.y * 0.01) * 0.3;
+
+        if (flake.y > height) {
+          flake.y = -5;
+          flake.x = Math.random() * width;
+        }
+        if (flake.x > width) flake.x = 0;
+        if (flake.x < 0) flake.x = width;
+      }
+      requestAnimationFrame(animateSnow);
+    }
+
+    animateSnow();
+  </script>
+
+</body>
+</html>
